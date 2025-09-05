@@ -82,3 +82,30 @@ Feel free to fork the repository, make changes, and submit pull requests. Please
 
 [Specify your license here, e.g., MIT License]
 
+
+
+## Frontend Configuration Update
+
+During development, it was necessary to modify the `vite.config.js` file to allow the frontend development server to be accessible from outside `localhost`. The `server.allowedHosts` property was updated to include `.manus.computer`.
+
+```javascript
+export default defineConfig({
+  plugins: [react()],
+  server: {
+    host: true,
+    port: 5173,
+    strictPort: true,
+    hmr: {
+      port: 5173,
+    },
+    watch: {
+      usePolling: true,
+    },
+    allowedHosts: [
+      ".manus.computer"
+    ]
+  }
+})
+```
+
+
