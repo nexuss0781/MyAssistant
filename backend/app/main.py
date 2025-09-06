@@ -1,6 +1,8 @@
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, BackgroundTasks, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import json
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 
 # Import the core modules
 from .websocket_manager import ConnectionManager
@@ -26,7 +28,7 @@ app.add_middleware(
 manager = ConnectionManager()
 
 # --- HEALTH CHECK ENDPOINT ---
-@app.get("/", tags=["Health Check"])
+@app.get("/health", tags=["Health Check"])
 async def read_root():
     return {"status": "ok", "message": "AI Agent backend is running."}
 
@@ -91,3 +93,11 @@ async def run_agent(request: Request, background_tasks: BackgroundTasks):
         manager=manager
     )
     return {"status": "success", "message": "Agent task has been started for the specified session."}
+
+
+# --- STATIC FILES ---
+app.mount("/assets", StaticFiles(directory="static/assets"), name="assets")
+
+@app.get("/{catchall:path}")
+async def serve_static(catchall: str):
+    return FileResponse("static/index.html")
