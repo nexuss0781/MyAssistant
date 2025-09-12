@@ -1,9 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useWebSocket } from './hooks/useWebSocket';
 import SessionList from './components/SessionList';
 import ChatLog from './components/ChatLog';
 import InputBar from './components/InputBar';
 import Header from './components/Header';
+import { PanelGroup, Panel, PanelResizeHandle } from 'react-resizable-panels';
+import Editor from '@monaco-editor/react';
 
 function App() {
   // --- STATE MANAGEMENT ---
@@ -12,7 +14,10 @@ function App() {
   const [isAgentRunning, setIsAgentRunning] = useState(false);
   const [sessions, setSessions] = useState([]);
   const [activeSessionId, setActiveSessionId] = useState(null);
-  
+  const [layoutMode, setLayoutMode] = useState('simple'); // 'simple' or 'vscode'
+  const [activeFileContent, setActiveFileContent] = useState('');
+  const [activeFilePath, setActiveFilePath] = useState('');
+
   // --- WEB SOCKET HANDLING ---
   const lastMessage = useWebSocket(clientId);
 
@@ -150,35 +155,104 @@ function App() {
       setIsAgentRunning(false);
     }
   };
-  
+
+  const handleFileSelect = async (filePath) => {
+    setActiveFilePath(filePath);
+    // In a real app, you'd fetch file content from the backend here
+    // For now, we'll just simulate content
+    setActiveFileContent(`Content of ${filePath}`);
+  };
+
+  const toggleLayoutMode = () => {
+    setLayoutMode(prevMode => (prevMode === 'simple' ? 'vscode' : 'simple'));
+  };
+
   // --- RENDER ---
   return (
-    <div className="container-fluid vh-100 p-0 d-flex">
-      <div className="d-none d-md-flex flex-column col-md-3 col-lg-2 p-0">
-        <SessionList sessions={sessions} activeSessionId={activeSessionId} onNewSession={handleNewSession} onSelectSession={handleSelectSession} />
-      </div>
+    <div className="container-fluid vh-100 p-0 d-flex flex-column">
+      <Header />
+      <div className="d-flex flex-grow-1">
+        {/* Layout Mode Switch */}
+        <div className="p-2 bg-light border-bottom">
+          <button className="btn btn-sm btn-outline-secondary" onClick={toggleLayoutMode}>
+            Switch to {layoutMode === 'simple' ? 'VS Code Layout' : 'Simple Layout'}
+          </button>
+        </div>
 
-      <div className="offcanvas offcanvas-start d-md-none bg-body-tertiary" tabIndex="-1" id="session-sidebar">
-        <div className="offcanvas-header">
-            <h5 className="offcanvas-title">Sessions</h5>
-            <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div className="offcanvas-body p-0">
-            <SessionList sessions={sessions} activeSessionId={activeSessionId} onNewSession={handleNewSession} onSelectSession={handleSelectSession} />
-        </div>
+        {layoutMode === 'simple' ? (
+          <div className="d-flex flex-grow-1">
+            <div className="d-none d-md-flex flex-column col-md-3 col-lg-2 p-0">
+              <SessionList sessions={sessions} activeSessionId={activeSessionId} onNewSession={handleNewSession} onSelectSession={handleSelectSession} />
+            </div>
+
+            <div className="offcanvas offcanvas-start d-md-none bg-body-tertiary" tabIndex="-1" id="session-sidebar">
+              <div className="offcanvas-header">
+                  <h5 className="offcanvas-title">Sessions</h5>
+                  <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+              </div>
+              <div className="offcanvas-body p-0">
+                  <SessionList sessions={sessions} activeSessionId={activeSessionId} onNewSession={handleNewSession} onSelectSession={handleSelectSession} />
+              </div>
+            </div>
+            
+            <main className="d-flex flex-column flex-grow-1 h-100">
+              <div className="flex-grow-1" style={{ overflowY: 'auto' }}>
+                <ChatLog messages={messages} />
+              </div>
+              <div>
+                <InputBar onSubmit={handleAgentSubmit} isRunning={isAgentRunning} />
+              </div>
+            </main>
+          </div>
+        ) : (
+          <PanelGroup direction="horizontal" className="d-flex flex-grow-1">
+            <Panel defaultSize={20} minSize={10}>
+              <div className="d-flex flex-column h-100 bg-light border-end">
+                <h6 className="p-2 mb-0 border-bottom">Files</h6>
+                {/* Placeholder for File Tree Component */}
+                <div className="flex-grow-1 p-2" style={{ overflowY: 'auto' }}>
+                  <p>File Tree will go here.</p>
+                  <button onClick={() => handleFileSelect('src/App.jsx')}>Open App.jsx</button>
+                </div>
+              </div>
+            </Panel>
+            <PanelResizeHandle className="bg-secondary" style={{ width: '5px' }} />
+            <Panel defaultSize={50} minSize={20}>
+              <div className="d-flex flex-column h-100">
+                <h6 className="p-2 mb-0 border-bottom">{activeFilePath || 'No file open'}</h6>
+                <div className="flex-grow-1">
+                  <Editor
+                    height="100%"
+                    language="javascript"
+                    value={activeFileContent}
+                    theme="vs-dark"
+                    options={{
+                      readOnly: true,
+                      minimap: { enabled: false },
+                      wordWrap: 'on',
+                    }}
+                  />
+                </div>
+              </div>
+            </Panel>
+            <PanelResizeHandle className="bg-secondary" style={{ width: '5px' }} />
+            <Panel defaultSize={30} minSize={20}>
+              <div className="d-flex flex-column h-100 bg-light border-start">
+                <h6 className="p-2 mb-0 border-bottom">Chat</h6>
+                <div className="flex-grow-1" style={{ overflowY: 'auto' }}>
+                  <ChatLog messages={messages} />
+                </div>
+                <div>
+                  <InputBar onSubmit={handleAgentSubmit} isRunning={isAgentRunning} />
+                </div>
+              </div>
+            </Panel>
+          </PanelGroup>
+        )}
       </div>
-      
-      <main className="d-flex flex-column flex-grow-1 h-100">
-        <Header />
-        <div className="flex-grow-1" style={{ overflowY: 'auto' }}>
-          <ChatLog messages={messages} />
-        </div>
-        <div>
-          <InputBar onSubmit={handleAgentSubmit} isRunning={isAgentRunning} />
-        </div>
-      </main>
     </div>
   );
 }
 
 export default App;
+

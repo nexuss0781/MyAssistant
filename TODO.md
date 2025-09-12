@@ -86,14 +86,11 @@ This section breaks down the implementation into actionable tasks, following the
 
 ### Phase 4: Develop VS Code-inspired frontend layout with dual mode switching
 
-*   **Frontend Architecture:**
-    *   [ ] Research and select appropriate React libraries for layout (e.g., `react-resizable-panels`, `react-split-pane`).
-    *   [ ] Integrate Monaco Editor into the central pane.
-    *   [ ] Implement the three-pane layout: File Tree (left), Code Editor (center), Chat Window (right).
-    *   [ ] Create a mechanism to switch between the 
-
-simple window layout and the VS Code-inspired layout.
-
+*   [x] **Frontend Architecture:**
+    *   [x] Researched and selected `react-resizable-panels` for layout.
+    *   [x] Integrated Monaco Editor into the central pane.
+    *   [x] Implemented the basic three-pane layout: File Tree (left), Code Editor (center), Chat Window (right).
+    *   [x] Created a mechanism to switch between the simple window layout and the VS Code-inspired layout.
 *   **File Tree Component:**
     *   [ ] Develop a React component to display the project file structure hierarchically.
     *   [ ] Implement file/folder selection and opening functionality.
