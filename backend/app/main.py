@@ -1,8 +1,8 @@
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, BackgroundTasks, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import json
-from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
+# from fastapi.staticfiles import StaticFiles
+# from fastapi.responses import FileResponse
 
 # Import the core modules
 from .websocket_manager import ConnectionManager
@@ -97,11 +97,12 @@ async def run_agent(request: Request, background_tasks: BackgroundTasks):
 
 
 # --- STATIC FILES ---
-app.mount("/assets", StaticFiles(directory="static/assets"), name="assets")
+# Static file serving is handled by the separate frontend application
+# app.mount("/assets", StaticFiles(directory="static/assets"), name="assets")
 
-@app.get("/{catchall:path}")
-async def serve_static(catchall: str):
-    return FileResponse("static/index.html")
+# @app.get("/{catchall:path}")
+# async def serve_static(catchall: str):
+#     return FileResponse("static/index.html")
 
 
 @app.get("/sessions/{session_id}/files", tags=["Filesystem"])
