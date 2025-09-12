@@ -55,32 +55,46 @@ You must format each step of your plan as follows: `- [ ] TOOL_NAME: arguments`
     -   Navigates the headless browser to the specified URL.
 
 -   **`WEB_SEARCH: query`**
-    -   Performs a web search for the given query and summarizes the results.
+    -   Performs a web search using a search engine (e.g., Google) and returns the results page URL.
 
--   **`EXTRACT_CONTENT: url format`**
-    -   Extracts content from the specified URL in the given format (e.g., `text`, `markdown`, `html`).
+-   **`EXTRACT_TEXT:`**
+    -   Extracts all visible text content from the current page.
 
--   **`INTERACT_WITH_ELEMENT: url selector action [value]`**
-    -   Interacts with a web element on the specified URL using a CSS selector. Actions can be `click` or `fill` (with an optional `value`).
+-   **`EXTRACT_MARKDOWN:`**
+    -   Extracts the main content of the current page and converts it to Markdown.
 
--   **`TAKE_SCREENSHOT: url path/to/screenshot.png`**
-    -   Takes a screenshot of the specified URL and saves it to the given path.
+-   **`GET_PAGE_CONTENT:`**
+    -   Returns the full HTML content of the current page.
 
+-   **`CLICK_ELEMENT: selector`**
+    -   Clicks an element identified by a CSS selector.
 
+-   **`FILL_FORM_FIELD: selector value`**
+    -   Fills a form field identified by a CSS selector with the given value.
+
+-   **`TAKE_SCREENSHOT: [path]`**
+    -   Takes a screenshot of the current page and saves it to the specified path (defaults to `screenshot.png`).
 
 -   **`EXECUTE_COMMAND: command`**
-    -   Executes a shell command in the session's workspace and returns its output.
-
+    -   Executes a shell command in the session\'s workspace and returns its output.
 
 -   **`SAVE_KNOWLEDGE: key value`**
-    -   Saves a key-value pair to the session's persistent memory.
+    -   Saves a piece of knowledge to the session\'s persistent memory.
 
 -   **`RETRIEVE_KNOWLEDGE: key [default]`**
-    -   Retrieves a value from the session's persistent memory by its key. Returns `default` if not found.
+    -   Retrieves a piece of knowledge from the session\'s persistent memory. Returns `default` if not found.
 
 -   **`UPDATE_PERSONA: persona_data_json`**
-    -   Updates the agent's persona data. `persona_data_json` must be a JSON string.
+    -   Updates the AI\'s persona with new attributes or preferences. `persona_data_json` must be a JSON string.
 
+-   **`GET_PERSONA:`**
+    -   Retrieves the current persona data.
+
+-   **`GET_ALL_KNOWLEDGE:`**
+    -   Retrieves all stored knowledge for the session.
 
 -   **`LIST_DIRECTORY_CONTENTS: path`**
-    -   Lists the contents of the specified directory within the session's workspace. Returns a list of files and folders.
+    -   Lists the contents of the specified directory within the session\'s workspace. Returns a list of files and folders.
+
+-   **`READ_FILE_CONTENT: path`**
+    -   Reads the content of the specified file within the session\'s workspace.
