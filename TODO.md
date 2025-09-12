@@ -37,9 +37,7 @@ The `MyAssistant` project provides a foundational AI agent with a React frontend
 *   **Terminal Execution (Partial):** The `filesystem_tools.py` provides some interaction with the sandbox, which is a step towards terminal execution. However, direct arbitrary command execution is not explicitly implemented as a tool for the agent.
 *   **File Management:** `filesystem_tools.py` covers basic CRUD operations for files and folders.
 *   **Chat Window (Partial):** The existing React frontend likely has a chat interface, but its integration with the full Ethco AI vision (VS Code layout, real-time feedback) needs enhancement.
-*   **Memory Management (Partial):** `session_manager.py` handles session history, which is a form of memory, but a more explicit 
-
-persistent and context-aware memory for the LLM is needed.
+*   **Memory Management (Partial):** `session_manager.py` handles session history, which is a form of memory, but a more explicit persistent and context-aware memory for the LLM is needed.
 
 ### What is Lacked Completely:
 
@@ -63,48 +61,48 @@ This section breaks down the implementation into actionable tasks, following the
 
 ### Phase 2: Create comprehensive todo list based on analysis (Current)
 
-*   [ ] Finalize `TODO.md` with detailed tasks.
+*   [x] Finalize `TODO.md` with detailed tasks.
 *   [ ] Commit `TODO.md` to the repository.
 
 ### Phase 3: Implement missing core features and backend functionality
 
 *   **Backend Enhancements:**
-    *   [x] **Implement comprehensive Browser Tool:**
-        *   [x] Create a new `browser_tools.py` module.
-        *   [x] Add functions for `navigate_to_url`, `web_search`, `extract_content` (text, markdown, html), `interact_with_element` (click, fill form), `take_screenshot`.
-        *   [x] Integrate `browser_tools.py` into `agent_core.py` as an available tool.
-        *   [x] Update `prompt.md` with the new browser tool syntax.
-   *   [x] **Enhance Terminal Execution Tool:**
-        *   [x] Created `terminal_tools.py` module.
-        *   [x] Allowed execution of arbitrary shell commands.
-        *   [x] Ensured command output can be captured and returned to the agent/frontend.
-        *   [x] Updated `prompt.md` with the new terminal tool syntax.
-    *   [x] **Implement Advanced Memory Management:**
-        *   [x] Designed a persistent storage mechanism for LLM memory (`memory_manager.py`).
-        *   [x] Implemented functions to `save_knowledge`, `retrieve_knowledge`, and `update_persona`.
-        *   [x] Integrated memory functions into `agent_core.py`.
+    *   [ ] **Implement comprehensive Browser Tool:**
+        *   [ ] Create a new `browser_tools.py` module.
+        *   [ ] Add functions for `navigate_to_url`, `web_search`, `extract_content` (text, markdown, html), `interact_with_element` (click, fill form), `take_screenshot`.
+        *   [ ] Integrate `browser_tools.py` into `agent_core.py` as an available tool.
+        *   [ ] Update `prompt.md` with the new browser tool syntax.
+    *   [ ] **Enhance Terminal Execution Tool:**
+        *   [ ] Create `terminal_tools.py` module.
+        *   [ ] Allow execution of arbitrary shell commands.
+        *   [ ] Ensure command output can be captured and returned to the agent/frontend.
+        *   [ ] Update `prompt.md` with the new terminal tool syntax.
+    *   [ ] **Implement Advanced Memory Management:**
+        *   [ ] Design a persistent storage mechanism for LLM memory (`memory_manager.py`).
+        *   [ ] Implement functions to `save_knowledge`, `retrieve_knowledge`, and `update_persona`.
+        *   [ ] Integrate memory functions into `agent_core.py`.
 
 ### Phase 4: Develop VS Code-inspired frontend layout with dual mode switching
 
-*   [x] **Frontend Architecture:**
-    *   [x] Researched and selected `react-resizable-panels` for layout.
-    *   [x] Integrated Monaco Editor into the central pane.
-    *   [x] Implemented the basic three-pane layout: File Tree (left), Code Editor (center), Chat Window (right).
-    *   [x] Created a mechanism to switch between the simple window layout and the VS Code-inspired layout.
-*   **File Tree Component:**
-*   [x] Developed a React component (`FileTree.jsx`) to display the project file structure hierarchically.
-*   [x] Implemented file/folder selection and opening functionality.
-*   [x] Integrated with backend `filesystem_tools` to reflect real-time changes.
+*   [ ] **Frontend Architecture:**
+    *   [ ] Research and select `react-resizable-panels` for layout.
+    *   [ ] Integrate Monaco Editor into the central pane.
+    *   [ ] Implement the basic three-pane layout: File Tree (left), Code Editor (center), Chat Window (right).
+    *   [ ] Create a mechanism to switch between the simple window layout and the VS Code-inspired layout.
+*   [ ] **File Tree Component:**
+    *   [ ] Develop a React component (`FileTree.jsx`) to display the project file structure hierarchically.
+    *   [ ] Implement file/folder selection and opening functionality.
+    *   [ ] Integrate with backend `filesystem_tools` to reflect real-time changes.
 
-*   **Code Editor Component:**
-    *   [x] Integrated Monaco Editor for code viewing and editing.
-    *   [x] Implemented syntax highlighting, line numbers, and basic editor features.
-    *   [x] Connected editor content with backend file operations.
+*   [ ] **Code Editor Component:**
+    *   [ ] Integrate Monaco Editor for code viewing and editing.
+    *   [ ] Implement syntax highlighting, line numbers, and basic editor features.
+    *   [ ] Connect editor content with backend file operations.
 
-*   **Chat Window Component:**
-*   [x] Redesigned the chat interface to fit the right pane of the VS Code layout.
-*   [x] Ensured seamless real-time communication via WebSockets.
-*   [x] Displayed agent responses and tool outputs clearly.
+*   [ ] **Chat Window Component:**
+    *   [ ] Redesign the chat interface to fit the right pane of the VS Code layout.
+    *   [ ] Ensure seamless real-time communication via WebSockets.
+    *   [ ] Display agent responses and tool outputs clearly.
 
 ### Phase 5: Implement real-time tool usage feedback and visual indicators
 
@@ -117,9 +115,7 @@ This section breaks down the implementation into actionable tasks, following the
     *   [ ] Show command output in the chat window in real-time.
 
 *   **Visual Feedback for Browser Integration:**
-    *   [ ] Display current URL and a brief status (e.g., 
-
-"browsing", "searching") in the chat window when the agent is using browser tools.
+    *   [ ] Display current URL and a brief status (e.g., "browsing", "searching") in the chat window when the agent is using browser tools.
     *   [ ] Potentially display small thumbnails or snippets of web content being processed.
 
 ### Phase 6: Enhance and polish the professional frontend appearance
@@ -159,3 +155,4 @@ This section breaks down the implementation into actionable tasks, following the
 **---
 
 **Note:** This plan is dynamic and will be adjusted as development progresses and new requirements arise. The primary goal is to deliver a robust, intuitive, and powerful AI agent development environment.
+
