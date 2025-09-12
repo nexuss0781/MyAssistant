@@ -67,20 +67,19 @@ This section breaks down the implementation into actionable tasks, following the
 ### Phase 3: Implement missing core features and backend functionality
 
 *   **Backend Enhancements:**
-    *   [x] **Implement comprehensive Browser Tool:**
-*   [x] Create a new `browser_tools.py` module.
+ *   [x] Create a new `browser_tools.py` module.
 *   [x] Add functions for `navigate_to_url`, `web_search`, `extract_content` (text, markdown, html), `interact_with_element` (click, fill form), `take_screenshot`.
 *   [x] Integrate `browser_tools.py` into `agent_core.py` as an available tool.
 *   [x] Update `prompt.md` with the new browser tool syntax.
-    *   [ ] **Enhance Terminal Execution Tool:**
-        *   [ ] Create `terminal_tools.py` module.
-        *   [ ] Allow execution of arbitrary shell commands.
-        *   [ ] Ensure command output can be captured and returned to the agent/frontend.
-        *   [ ] Update `prompt.md` with the new terminal tool syntax.
-    *   [ ] **Implement Advanced Memory Management:**
-        *   [ ] Design a persistent storage mechanism for LLM memory (`memory_manager.py`).
-        *   [ ] Implement functions to `save_knowledge`, `retrieve_knowledge`, and `update_persona`.
-        *   [ ] Integrate memory functions into `agent_core.py`.
+    *   [x] **Enhance Terminal Execution Tool:**
+        *   [x] Create `terminal_tools.py` module.
+        *   [x] Allow execution of arbitrary shell commands.
+        *   [x] Ensure command output can be captured and returned to the agent/frontend.
+        *   [x] Update `prompt.md` with the new terminal tool syntax.
+    *   [x] **Implement Advanced Memory Management:**
+        *   [x] Design a persistent storage mechanism for LLM memory (`memory_manager.py`).
+        *   [x] Implement functions to `save_knowledge`, `retrieve_knowledge`, and `update_persona`.
+        *   [x] Integrate memory functions into `agent_core.py`.
 
 ### Phase 4: Develop VS Code-inspired frontend layout with dual mode switching
 
