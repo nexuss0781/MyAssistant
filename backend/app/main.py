@@ -1,8 +1,9 @@
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, BackgroundTasks, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-import json
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
+import json
+import os
 
 # Import the core modules
 from .websocket_manager import ConnectionManager
@@ -97,11 +98,35 @@ async def run_agent(request: Request, background_tasks: BackgroundTasks):
 
 
 # --- STATIC FILES ---
-app.mount("/assets", StaticFiles(directory="static/assets"), name="assets")
-
-@app.get("/{catchall:path}")
-async def serve_static(catchall: str):
-    return FileResponse("static/index.html")
+# Serve static files for unified Docker deployment
+static_dir = "static"
+if os.path.exists(static_dir):
+    # Mount static assets (CSS, JS, etc.)
+    app.mount("/assets", StaticFiles(directory=f"{static_dir}/assets"), name="assets")
+    
+    # Serve the React app for all non-API routes
+    @app.get("/")
+    async def serve_root():
+        """Serve the main React application"""
+        return FileResponse(f"{static_dir}/index.html")
+    
+    @app.get("/{catchall:path}")
+    async def serve_frontend(catchall: str):
+        """Serve React app for all frontend routes, API routes pass through"""
+        # Let API routes pass through normally
+        if (catchall.startswith("api/") or 
+            catchall.startswith("ws/") or 
+            catchall.startswith("sessions/") or 
+            catchall.startswith("agent/") or
+            catchall.startswith("health") or
+            catchall.startswith("docs") or
+            catchall.startswith("redoc") or
+            catchall.startswith("openapi.json")):
+            # This will cause a 404 for non-existent API routes
+            raise HTTPException(status_code=404, detail="API endpoint not found")
+        
+        # For all other routes, serve the React app
+        return FileResponse(f"{static_dir}/index.html")
 
 
 @app.get("/sessions/{session_id}/files", tags=["Filesystem"])

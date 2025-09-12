@@ -7,19 +7,22 @@ const MenuIcon = () => (
 
 export default function Header() {
   return (
-    // This header is only visible on screens smaller than md (d-md-none)
-    <header className="d-md-none p-3 bg-body-tertiary d-flex justify-content-between align-items-center">
-      <h1 className="fs-5 mb-0">AI Agent</h1>
-      <button 
-        className="btn" 
-        type="button" 
-        data-bs-toggle="offcanvas" 
-        data-bs-target="#session-sidebar" 
-        aria-controls="session-sidebar"
-        aria-label="Toggle navigation"
-      >
-        <MenuIcon />
-      </button>
+    <header className="app-header">
+      <div className="d-flex justify-content-between align-items-center">
+        <h1>Ethco AI</h1>
+        <div className="d-md-none">
+          <button 
+            className="btn" 
+            type="button" 
+            data-bs-toggle="offcanvas" 
+            data-bs-target="#session-sidebar" 
+            aria-controls="session-sidebar"
+            aria-label="Toggle navigation"
+          >
+            <MenuIcon />
+          </button>
+        </div>
+      </div>
     </header>
   );
 }

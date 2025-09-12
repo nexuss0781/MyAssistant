@@ -5,6 +5,24 @@ from functools import partial
 from app import gemini_handler, filesystem_tools, session_manager, browser_tools, terminal_tools, memory_manager
 from app.websocket_manager import ConnectionManager
 
+def get_tool_category(tool_name: str) -> str:
+    """Categorize tools for better UI feedback"""
+    file_tools = ["CREATE_FILE", "DELETE_FILE", "ADD_CONTENT", "CREATE_FOLDER", "DELETE_FOLDER", "LIST_DIRECTORY_CONTENTS", "READ_FILE_CONTENT"]
+    terminal_tools = ["EXECUTE_COMMAND"]
+    browser_tools = ["NAVIGATE_TO_URL", "WEB_SEARCH", "EXTRACT_CONTENT", "INTERACT_WITH_ELEMENT", "TAKE_SCREENSHOT"]
+    memory_tools = ["SAVE_KNOWLEDGE", "RETRIEVE_KNOWLEDGE", "UPDATE_PERSONA"]
+    
+    if tool_name in file_tools:
+        return "file"
+    elif tool_name in terminal_tools:
+        return "terminal"
+    elif tool_name in browser_tools:
+        return "browser"
+    elif tool_name in memory_tools:
+        return "memory"
+    else:
+        return "other"
+
 async def generate_plan(user_prompt: str) -> str:
     """
     Generates a plan by combining the agent's constitution with the user's prompt
@@ -95,15 +113,24 @@ async def execute_plan(commands: list, session_id: str, client_id: str, manager:
         "READ_FILE_CONTENT": partial(filesystem_tools.read_file_content, session_id=session_id),
     }
 
-    for command in commands:
+    for i, command in enumerate(commands):
         tool_name = command["tool"]
         current_task_message = f"{tool_name}: {command.get('path') or command.get('args')}"
         
-        # Notify frontend that a task is starting
-        await manager.send_personal_message({"type": "task_start", "data": current_task_message}, client_id)
+        # Notify frontend that a task is starting with detailed info
+        await manager.send_personal_message({
+            "type": "tool_start", 
+            "data": {
+                "id": f"{tool_name}_{i}",
+                "tool_type": get_tool_category(tool_name),
+                "description": current_task_message
+            }
+        }, client_id)
 
         if tool_name in tool_map:
             try:
+                import time
+                start_time = time.time()
                 func = tool_map[tool_name]
                 if tool_name == "ADD_CONTENT":
                     result = await func(path=command["path"], content=command["content"])
@@ -150,7 +177,54 @@ async def execute_plan(commands: list, session_id: str, client_id: str, manager:
                 elif tool_name == "READ_FILE_CONTENT":
                     result = await func(path=command["args"])
                 
-                # Notify frontend that the task is complete
+                # Calculate execution time and notify frontend that the task is complete
+                end_time = time.time()
+                duration = int((end_time - start_time) * 1000)  # Convert to milliseconds
+                
+                await manager.send_personal_message({
+                    "type": "tool_complete",
+                    "data": {
+                        "id": f"{tool_name}_{i}",
+                        "tool_type": get_tool_category(tool_name),
+                        "description": current_task_message,
+                        "result": str(result),
+                        "success": True,
+                        "duration": duration
+                    }
+                }, client_id)
+                
+                # Also send specific operation type messages for better UI feedback
+                if get_tool_category(tool_name) == "file":
+                    await manager.send_personal_message({
+                        "type": "file_operation",
+                        "data": {
+                            "operation": tool_name,
+                            "path": command.get("path") or command.get("args"),
+                            "result": str(result),
+                            "success": True
+                        }
+                    }, client_id)
+                elif get_tool_category(tool_name) == "terminal":
+                    await manager.send_personal_message({
+                        "type": "terminal_output",
+                        "data": {
+                            "command": command.get("args"),
+                            "output": str(result),
+                            "exit_code": 0
+                        }
+                    }, client_id)
+                elif get_tool_category(tool_name) == "browser":
+                    await manager.send_personal_message({
+                        "type": "browser_action",
+                        "data": {
+                            "action": tool_name,
+                            "url": command.get("args"),
+                            "result": str(result),
+                            "success": True
+                        }
+                    }, client_id)
+                
+                # Keep the original task_complete message for backward compatibility
                 await manager.send_personal_message({"type": "task_complete", "data": current_task_message, "result": result}, client_id)
 
 
@@ -158,7 +232,57 @@ async def execute_plan(commands: list, session_id: str, client_id: str, manager:
 
 
             except Exception as e:
+                # Calculate execution time even for errors
+                end_time = time.time()
+                duration = int((end_time - start_time) * 1000)
+                
                 error_message = f"Error executing '{current_task_message}': {e}"
+                
+                # Send detailed error feedback
+                await manager.send_personal_message({
+                    "type": "tool_complete",
+                    "data": {
+                        "id": f"{tool_name}_{i}",
+                        "tool_type": get_tool_category(tool_name),
+                        "description": current_task_message,
+                        "result": error_message,
+                        "success": False,
+                        "duration": duration
+                    }
+                }, client_id)
+                
+                # Send specific operation error messages
+                if get_tool_category(tool_name) == "file":
+                    await manager.send_personal_message({
+                        "type": "file_operation",
+                        "data": {
+                            "operation": tool_name,
+                            "path": command.get("path") or command.get("args"),
+                            "result": error_message,
+                            "success": False
+                        }
+                    }, client_id)
+                elif get_tool_category(tool_name) == "terminal":
+                    await manager.send_personal_message({
+                        "type": "terminal_output",
+                        "data": {
+                            "command": command.get("args"),
+                            "output": error_message,
+                            "exit_code": 1
+                        }
+                    }, client_id)
+                elif get_tool_category(tool_name) == "browser":
+                    await manager.send_personal_message({
+                        "type": "browser_action",
+                        "data": {
+                            "action": tool_name,
+                            "url": command.get("args"),
+                            "result": error_message,
+                            "success": False
+                        }
+                    }, client_id)
+                
+                # Keep original error message for backward compatibility
                 await manager.send_personal_message({"type": "error", "data": error_message}, client_id)
                 break # Stop execution on error
         elif tool_name == "FINISH":

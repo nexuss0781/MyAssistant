@@ -11,8 +11,8 @@ export default function ChatLog({ messages }) {
           return <TaskProgress key={index} tasks={msg.tasks} />;
         }
         
-        // Otherwise, render a standard message bubble.
-        return <Message key={index} type={msg.type} text={msg.text} />;
+        // Otherwise, render a standard message bubble with metadata support.
+        return <Message key={index} type={msg.type} text={msg.text} metadata={msg.metadata} />;
       })}
     </div>
   );

@@ -1,20 +1,71 @@
+# Docker Compose for Ethco AI
+# Provides both development and production configurations
+
 version: '3.8'
 
 services:
-  frontend:
+  # Unified Ethco AI Service (Frontend + Backend)
+  ethco-ai:
     build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    ports:
-      - "80:80"
-    depends_on:
-      - backend
-
-  backend:
-    build:
-      context: ./backend
+      context: .
       dockerfile: Dockerfile
     ports:
       - "8000:8000"
+    environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - PYTHONPATH=/app
+      - PLAYWRIGHT_BROWSERS_PATH=/root/.cache/ms-playwright
+    volumes:
+      # Mount sessions directory for persistence
+      - ./sessions:/app/sessions
+      # Optional: Mount logs directory
+      - ./logs:/app/logs
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - ethco-network
 
+  # Optional: Separate development services
+  # Uncomment below for development with separate frontend/backend
 
+  # ethco-backend-dev:
+  #   build:
+  #     context: ./backend
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "8000:8000"
+  #   environment:
+  #     - GEMINI_API_KEY=${GEMINI_API_KEY}
+  #   volumes:
+  #     - ./backend:/app
+  #     - ./sessions:/app/sessions
+  #   restart: unless-stopped
+  #   networks:
+  #     - ethco-network
+
+  # ethco-frontend-dev:
+  #   build:
+  #     context: ./frontend
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "3000:80"
+  #   depends_on:
+  #     - ethco-backend-dev
+  #   restart: unless-stopped
+  #   networks:
+  #     - ethco-network
+
+networks:
+  ethco-network:
+    driver: bridge
+
+volumes:
+  ethco-sessions:
+    driver: local
+  ethco-logs:
+    driver: local
