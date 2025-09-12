@@ -79,10 +79,10 @@ This section breaks down the implementation into actionable tasks, following the
         *   [x] Allowed execution of arbitrary shell commands.
         *   [x] Ensured command output can be captured and returned to the agent/frontend.
         *   [x] Updated `prompt.md` with the new terminal tool syntax.
-    *   [ ] **Implement Advanced Memory Management:**
-        *   [ ] Design a persistent storage mechanism for LLM memory (e.g., a simple JSON file per session or a small database).
-        *   [ ] Implement functions to `save_knowledge`, `retrieve_knowledge`, and `update_persona` within `session_manager.py` or a new `memory_manager.py`.
-        *   [ ] Integrate memory functions into `agent_core.py` to allow the LLM to utilize stored knowledge.
+    *   [x] **Implement Advanced Memory Management:**
+        *   [x] Designed a persistent storage mechanism for LLM memory (`memory_manager.py`).
+        *   [x] Implemented functions to `save_knowledge`, `retrieve_knowledge`, and `update_persona`.
+        *   [x] Integrated memory functions into `agent_core.py`.
 
 ### Phase 4: Develop VS Code-inspired frontend layout with dual mode switching
 
