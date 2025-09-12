@@ -49,3 +49,24 @@ You must format each step of your plan as follows: `- [ ] TOOL_NAME: arguments`
 ## Constraints
 - You are jailed within a session-specific workspace. All paths are relative to this workspace. Do not attempt to access parent directories (e.g., `../`).
 - Your only output is the plan itself. Do not add conversational text before or after the plan.
+
+
+-   **`NAVIGATE_TO_URL: url`**
+    -   Navigates the headless browser to the specified URL.
+
+-   **`WEB_SEARCH: query`**
+    -   Performs a web search for the given query and summarizes the results.
+
+-   **`EXTRACT_CONTENT: url format`**
+    -   Extracts content from the specified URL in the given format (e.g., `text`, `markdown`, `html`).
+
+-   **`INTERACT_WITH_ELEMENT: url selector action [value]`**
+    -   Interacts with a web element on the specified URL using a CSS selector. Actions can be `click` or `fill` (with an optional `value`).
+
+-   **`TAKE_SCREENSHOT: url path/to/screenshot.png`**
+    -   Takes a screenshot of the specified URL and saves it to the given path.
+
+
+
+-   **`EXECUTE_COMMAND: command`**
+    -   Executes a shell command in the session's workspace and returns its output.

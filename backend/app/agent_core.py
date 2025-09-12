@@ -1,7 +1,7 @@
 import os
 import re
 from functools import partial
-from app import gemini_handler, filesystem_tools, session_manager
+from app import gemini_handler, filesystem_tools, session_manager, browser_tools, terminal_tools
 from app.websocket_manager import ConnectionManager
 
 async def generate_plan(user_prompt: str) -> str:
@@ -81,6 +81,12 @@ async def execute_plan(commands: list, session_id: str, client_id: str, manager:
         "ADD_CONTENT": partial(filesystem_tools.add_content, session_id=session_id),
         "DELETE_FILE": partial(filesystem_tools.delete_file, session_id=session_id),
         "DELETE_FOLDER": partial(filesystem_tools.delete_folder, session_id=session_id),
+        "NAVIGATE_TO_URL": partial(browser_tools.navigate_to_url, session_id=session_id),
+        "WEB_SEARCH": partial(browser_tools.web_search, session_id=session_id),
+        "EXTRACT_CONTENT": partial(browser_tools.extract_content, session_id=session_id),
+        "INTERACT_WITH_ELEMENT": partial(browser_tools.interact_with_element, session_id=session_id),
+        "TAKE_SCREENSHOT": partial(browser_tools.take_screenshot, session_id=session_id),
+        "EXECUTE_COMMAND": partial(terminal_tools.execute_command, session_id=session_id),
     }
 
     for command in commands:
@@ -94,12 +100,37 @@ async def execute_plan(commands: list, session_id: str, client_id: str, manager:
             try:
                 func = tool_map[tool_name]
                 if tool_name == "ADD_CONTENT":
-                    func(path=command["path"], content=command["content"])
-                else:
-                    func(command["args"])
+                    result = await func(path=command["path"], content=command["content"])
+                elif tool_name == "CREATE_FILE" or tool_name == "CREATE_FOLDER" or tool_name == "DELETE_FILE" or tool_name == "DELETE_FOLDER":
+                    result = await func(command["args"])
+                elif tool_name == "EXECUTE_COMMAND":
+                    result = await func(command=command["args"])
+                elif tool_name == "NAVIGATE_TO_URL":
+                    result = await func(url=command["args"])
+                elif tool_name == "WEB_SEARCH":
+                    result = await func(query=command["args"])
+                elif tool_name == "EXTRACT_CONTENT":
+                    args_parts = command["args"].split(maxsplit=1)
+                    url = args_parts[0]
+                    format_arg = args_parts[1] if len(args_parts) > 1 else "text"
+                    result = await func(url=url, format=format_arg)
+                elif tool_name == "INTERACT_WITH_ELEMENT":
+                    args_parts = command["args"].split(maxsplit=3)
+                    url = args_parts[0]
+                    selector = args_parts[1]
+                    action = args_parts[2]
+                    value = args_parts[3] if len(args_parts) > 3 else None
+                    result = await func(url=url, selector=selector, action=action, value=value)
+                elif tool_name == "TAKE_SCREENSHOT":
+                    args_parts = command["args"].split(maxsplit=1)
+                    url = args_parts[0]
+                    path = args_parts[1] if len(args_parts) > 1 else "screenshot.png"
+                    result = await func(url=url, path=path)
                 
                 # Notify frontend that the task is complete
-                await manager.send_personal_message({"type": "task_complete", "data": current_task_message}, client_id)
+                await manager.send_personal_message({"type": "task_complete", "data": current_task_message, "result": result}, client_id)
+
+
             except Exception as e:
                 error_message = f"Error executing '{current_task_message}': {e}"
                 await manager.send_personal_message({"type": "error", "data": error_message}, client_id)
