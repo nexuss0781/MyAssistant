@@ -67,11 +67,11 @@ This section breaks down the implementation into actionable tasks, following the
 ### Phase 3: Implement missing core features and backend functionality
 
 *   **Backend Enhancements:**
-    *   [ ] **Implement comprehensive Browser Tool:**
-        *   [ ] Create a new `browser_tools.py` module.
-        *   [ ] Add functions for `navigate_to_url`, `web_search`, `extract_content` (text, markdown, html), `interact_with_element` (click, fill form), `take_screenshot`.
-        *   [ ] Integrate `browser_tools.py` into `agent_core.py` as an available tool.
-        *   [ ] Update `prompt.md` with the new browser tool syntax.
+    *   [x] **Implement comprehensive Browser Tool:**
+*   [x] Create a new `browser_tools.py` module.
+*   [x] Add functions for `navigate_to_url`, `web_search`, `extract_content` (text, markdown, html), `interact_with_element` (click, fill form), `take_screenshot`.
+*   [x] Integrate `browser_tools.py` into `agent_core.py` as an available tool.
+*   [x] Update `prompt.md` with the new browser tool syntax.
     *   [ ] **Enhance Terminal Execution Tool:**
         *   [ ] Create `terminal_tools.py` module.
         *   [ ] Allow execution of arbitrary shell commands.
