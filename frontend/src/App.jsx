@@ -5,8 +5,10 @@ import ChatLog from './components/ChatLog';
 import InputBar from './components/InputBar';
 import Header from './components/Header';
 import FileTree from './components/FileTree';
+import ToolStatus from './components/ToolStatus';
 import { PanelGroup, Panel, PanelResizeHandle } from 'react-resizable-panels';
 import Editor from '@monaco-editor/react';
+import './App.css';
 
 function App() {
   // --- STATE MANAGEMENT ---
@@ -18,6 +20,7 @@ function App() {
   const [layoutMode, setLayoutMode] = useState('simple'); // 'simple' or 'vscode'
   const [activeFileContent, setActiveFileContent] = useState('');
   const [activeFilePath, setActiveFilePath] = useState('');
+  const [activeOperations, setActiveOperations] = useState([]); // Track active tool operations
 
   // --- WEB SOCKET HANDLING ---
   const lastMessage = useWebSocket(clientId);
@@ -54,13 +57,78 @@ function App() {
         }));
         break;
       }
+      case 'tool_start':
+        // Add operation to active operations list
+        setActiveOperations(prev => [...prev, {
+          id: lastMessage.data.id || Date.now(),
+          type: lastMessage.data.tool_type,
+          description: lastMessage.data.description,
+          startTime: Date.now()
+        }]);
+        setMessages(prev => [...prev, { 
+          type: 'operation_loading', 
+          text: `${lastMessage.data.description}...` 
+        }]);
+        break;
+      case 'tool_complete':
+        // Remove operation from active operations and add result message
+        setActiveOperations(prev => prev.filter(op => op.id !== lastMessage.data.id));
+        setMessages(prev => {
+          // Remove the loading message and add the result
+          const filtered = prev.filter(msg => msg.type !== 'operation_loading' || 
+            !msg.text.includes(lastMessage.data.description));
+          return [...filtered, {
+            type: `${lastMessage.data.tool_type}_operation`,
+            text: lastMessage.data.result,
+            metadata: {
+              status: lastMessage.data.success ? 'success' : 'error',
+              duration: lastMessage.data.duration
+            }
+          }];
+        });
+        break;
+      case 'file_operation':
+        setMessages(prev => [...prev, {
+          type: 'file_operation',
+          text: lastMessage.data.result || lastMessage.data,
+          metadata: {
+            status: lastMessage.data.success !== false ? 'success' : 'error',
+            operation: lastMessage.data.operation,
+            path: lastMessage.data.path
+          }
+        }]);
+        break;
+      case 'terminal_output':
+        setMessages(prev => [...prev, {
+          type: 'terminal_operation',
+          text: lastMessage.data.output || lastMessage.data,
+          metadata: {
+            status: lastMessage.data.exit_code === 0 ? 'success' : 'error',
+            command: lastMessage.data.command,
+            exitCode: lastMessage.data.exit_code
+          }
+        }]);
+        break;
+      case 'browser_action':
+        setMessages(prev => [...prev, {
+          type: 'browser_operation',
+          text: lastMessage.data.result || lastMessage.data,
+          metadata: {
+            status: lastMessage.data.success !== false ? 'success' : 'error',
+            action: lastMessage.data.action,
+            url: lastMessage.data.url
+          }
+        }]);
+        break;
       case 'finish':
         setMessages(prev => [...prev, { type: 'agent', text: lastMessage.data }]);
         setIsAgentRunning(false);
+        setActiveOperations([]); // Clear any remaining operations
         break;
       case 'error':
         setMessages(prev => [...prev, { type: 'agent_error', text: lastMessage.data }]);
         setIsAgentRunning(false);
+        setActiveOperations([]); // Clear any remaining operations
         break;
     }
   }, [lastMessage]);
@@ -179,12 +247,12 @@ function App() {
 
   // --- RENDER ---
   return (
-    <div className="container-fluid vh-100 p-0 d-flex flex-column">
+    <div className="app-container">
       <Header />
       <div className="d-flex flex-grow-1">
         {/* Layout Mode Switch */}
         <div className="p-2 bg-light border-bottom">
-          <button className="btn btn-sm btn-outline-secondary" onClick={toggleLayoutMode}>
+          <button className="layout-toggle" onClick={toggleLayoutMode}>
             Switch to {layoutMode === 'simple' ? 'VS Code Layout' : 'Simple Layout'}
           </button>
         </div>
@@ -258,6 +326,9 @@ function App() {
           </PanelGroup>
         )}
       </div>
+      
+      {/* Tool Status Component for real-time feedback */}
+      <ToolStatus activeOperations={activeOperations} />
     </div>
   );
 }
