@@ -80,3 +80,7 @@ You must format each step of your plan as follows: `- [ ] TOOL_NAME: arguments`
 
 -   **`UPDATE_PERSONA: persona_data_json`**
     -   Updates the agent's persona data. `persona_data_json` must be a JSON string.
+
+
+-   **`LIST_DIRECTORY_CONTENTS: path`**
+    -   Lists the contents of the specified directory within the session's workspace. Returns a list of files and folders.

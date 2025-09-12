@@ -91,6 +91,8 @@ async def execute_plan(commands: list, session_id: str, client_id: str, manager:
         "SAVE_KNOWLEDGE": partial(memory_manager.save_knowledge, session_id=session_id),
         "RETRIEVE_KNOWLEDGE": partial(memory_manager.retrieve_knowledge, session_id=session_id),
         "UPDATE_PERSONA": partial(memory_manager.update_persona, session_id=session_id),
+        "LIST_DIRECTORY_CONTENTS": partial(filesystem_tools.list_directory_contents, session_id=session_id),
+        "READ_FILE_CONTENT": partial(filesystem_tools.read_file_content, session_id=session_id),
     }
 
     for command in commands:
@@ -143,9 +145,15 @@ async def execute_plan(commands: list, session_id: str, client_id: str, manager:
                 elif tool_name == "UPDATE_PERSONA":
                     persona_data = json.loads(command["args"])
                     result = await func(persona_data=persona_data)
+                elif tool_name == "LIST_DIRECTORY_CONTENTS":
+                    result = await func(path=command["args"])
+                elif tool_name == "READ_FILE_CONTENT":
+                    result = await func(path=command["args"])
                 
                 # Notify frontend that the task is complete
                 await manager.send_personal_message({"type": "task_complete", "data": current_task_message, "result": result}, client_id)
+
+
 
 
 

@@ -4,6 +4,7 @@ import SessionList from './components/SessionList';
 import ChatLog from './components/ChatLog';
 import InputBar from './components/InputBar';
 import Header from './components/Header';
+import FileTree from './components/FileTree';
 import { PanelGroup, Panel, PanelResizeHandle } from 'react-resizable-panels';
 import Editor from '@monaco-editor/react';
 
@@ -158,9 +159,18 @@ function App() {
 
   const handleFileSelect = async (filePath) => {
     setActiveFilePath(filePath);
-    // In a real app, you'd fetch file content from the backend here
-    // For now, we'll just simulate content
-    setActiveFileContent(`Content of ${filePath}`);
+    try {
+      const response = await fetch(`http://localhost:8000/sessions/${activeSessionId}/file_content?path=${filePath}`);
+      if (!response.ok) throw new Error("Failed to fetch file content");
+      const data = await response.json();
+      if (data.status === "error") {
+        throw new Error(data.message);
+      }
+      setActiveFileContent(data.content);
+    } catch (error) {
+      console.error("Error fetching file content:", error);
+      setActiveFileContent(`Error loading file: ${error.message}`);
+    }
   };
 
   const toggleLayoutMode = () => {
@@ -209,10 +219,8 @@ function App() {
             <Panel defaultSize={20} minSize={10}>
               <div className="d-flex flex-column h-100 bg-light border-end">
                 <h6 className="p-2 mb-0 border-bottom">Files</h6>
-                {/* Placeholder for File Tree Component */}
                 <div className="flex-grow-1 p-2" style={{ overflowY: 'auto' }}>
-                  <p>File Tree will go here.</p>
-                  <button onClick={() => handleFileSelect('src/App.jsx')}>Open App.jsx</button>
+                  <FileTree sessionId={activeSessionId} onFileSelect={handleFileSelect} />
                 </div>
               </div>
             </Panel>

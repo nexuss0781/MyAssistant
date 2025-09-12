@@ -7,7 +7,8 @@ from fastapi.responses import FileResponse
 # Import the core modules
 from .websocket_manager import ConnectionManager
 from . import agent_core
-from . import session_manager # <-- NEW IMPORT
+from . import session_manager
+from . import filesystem_tools # <-- NEW IMPORT
 
 # This is the main FastAPI application instance
 app = FastAPI(
@@ -101,3 +102,17 @@ app.mount("/assets", StaticFiles(directory="static/assets"), name="assets")
 @app.get("/{catchall:path}")
 async def serve_static(catchall: str):
     return FileResponse("static/index.html")
+
+
+@app.get("/sessions/{session_id}/files", tags=["Filesystem"])
+async def get_session_files(session_id: str, path: str = "."):
+    """Returns a list of files and folders within a session's workspace."""
+    return filesystem_tools.list_directory_contents(path=path, session_id=session_id)
+
+
+
+@app.get("/sessions/{session_id}/file_content", tags=["Filesystem"])
+async def get_file_content(session_id: str, path: str):
+    """Returns the content of a file within a session's workspace."""
+    return filesystem_tools.read_file_content(path=path, session_id=session_id)
+

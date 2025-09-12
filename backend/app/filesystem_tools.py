@@ -53,3 +53,47 @@ def delete_folder(path: str, session_id: str = None):
         raise FileNotFoundError(f"Folder not found, cannot delete: {path}")
     shutil.rmtree(safe_path)
     print(f"[{session_id}] Folder deleted: {path}")
+
+
+
+def list_directory_contents(path: str, session_id: str) -> dict:
+    """
+    Lists the contents of a directory within the session's workspace.
+    Returns a list of dictionaries, each representing a file or folder.
+    """
+    session_workspace = os.path.join(SESSIONS_DIR, session_id, 'workspace')
+    full_path = os.path.join(session_workspace, path)
+
+    if not os.path.isdir(full_path):
+        return {"status": "error", "message": f"Path is not a directory: {path}"}
+
+    contents = []
+    for item in os.listdir(full_path):
+        item_full_path = os.path.join(full_path, item)
+        item_relative_path = os.path.join(path, item)
+        if os.path.isdir(item_full_path):
+            contents.append({"name": item, "type": "folder", "path": item_relative_path})
+        else:
+            contents.append({"name": item, "type": "file", "path": item_relative_path})
+    return {"status": "success", "contents": contents}
+
+
+
+
+def read_file_content(path: str, session_id: str) -> dict:
+    """
+    Reads the content of a file within the session's workspace.
+    """
+    session_workspace = os.path.join(SESSIONS_DIR, session_id, 'workspace')
+    full_path = os.path.join(session_workspace, path)
+
+    if not os.path.isfile(full_path):
+        return {"status": "error", "message": f"File not found: {path}"}
+
+    try:
+        with open(full_path, 'r', encoding='utf-8') as f:
+            content = f.read()
+        return {"status": "success", "content": content}
+    except Exception as e:
+        return {"status": "error", "message": f"Failed to read file {path}: {e}"}
+

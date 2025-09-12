@@ -92,14 +92,14 @@ This section breaks down the implementation into actionable tasks, following the
     *   [x] Implemented the basic three-pane layout: File Tree (left), Code Editor (center), Chat Window (right).
     *   [x] Created a mechanism to switch between the simple window layout and the VS Code-inspired layout.
 *   **File Tree Component:**
-    *   [ ] Develop a React component to display the project file structure hierarchically.
-    *   [ ] Implement file/folder selection and opening functionality.
-    *   [ ] Integrate with backend `filesystem_tools` to reflect real-time changes.
+*   [x] Developed a React component (`FileTree.jsx`) to display the project file structure hierarchically.
+*   [x] Implemented file/folder selection and opening functionality.
+*   [x] Integrated with backend `filesystem_tools` to reflect real-time changes.
 
 *   **Code Editor Component:**
-    *   [ ] Integrate Monaco Editor for code viewing and editing.
-    *   [ ] Implement syntax highlighting, line numbers, and basic editor features.
-    *   [ ] Connect editor content with backend file operations.
+    *   [x] Integrated Monaco Editor for code viewing and editing.
+    *   [x] Implemented syntax highlighting, line numbers, and basic editor features.
+    *   [x] Connected editor content with backend file operations.
 
 *   **Chat Window Component:**
     *   [ ] Redesign the chat interface to fit the right pane of the VS Code layout.
