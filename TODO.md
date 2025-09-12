@@ -69,15 +69,16 @@ This section breaks down the implementation into actionable tasks, following the
 ### Phase 3: Implement missing core features and backend functionality
 
 *   **Backend Enhancements:**
-    *   [ ] **Implement comprehensive Browser Tool:**
-        *   [ ] Create a new `browser_tools.py` module.
-        *   [ ] Add functions for `navigate_to_url`, `web_search`, `extract_content` (text, markdown, html), `interact_with_element` (click, fill form), `take_screenshot`.
-        *   [ ] Integrate `browser_tools.py` into `agent_core.py` as an available tool.
-        *   [ ] Update `prompt.md` with the new browser tool syntax.
-    *   [ ] **Enhance Terminal Execution Tool:**
-        *   [ ] Modify `filesystem_tools.py` or create a new `terminal_tools.py` to allow execution of arbitrary shell commands.
-        *   [ ] Ensure command output can be captured and returned to the agent/frontend.
-        *   [ ] Update `prompt.md` with the new terminal execution tool syntax.
+    *   [x] **Implement comprehensive Browser Tool:**
+        *   [x] Create a new `browser_tools.py` module.
+        *   [x] Add functions for `navigate_to_url`, `web_search`, `extract_content` (text, markdown, html), `interact_with_element` (click, fill form), `take_screenshot`.
+        *   [x] Integrate `browser_tools.py` into `agent_core.py` as an available tool.
+        *   [x] Update `prompt.md` with the new browser tool syntax.
+   *   [x] **Enhance Terminal Execution Tool:**
+        *   [x] Created `terminal_tools.py` module.
+        *   [x] Allowed execution of arbitrary shell commands.
+        *   [x] Ensured command output can be captured and returned to the agent/frontend.
+        *   [x] Updated `prompt.md` with the new terminal tool syntax.
     *   [ ] **Implement Advanced Memory Management:**
         *   [ ] Design a persistent storage mechanism for LLM memory (e.g., a simple JSON file per session or a small database).
         *   [ ] Implement functions to `save_knowledge`, `retrieve_knowledge`, and `update_persona` within `session_manager.py` or a new `memory_manager.py`.
