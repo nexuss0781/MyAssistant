@@ -1,35 +1,51 @@
-# MyAssistant/backend/app/terminal_tools.py
 
 import asyncio
-import os
+import logging
 
-async def execute_command(command: str, session_id: str) -> dict:
-    """
-    Executes a shell command within the session's workspace and returns its output.
-    """
-    session_workspace = os.path.join("sessions", session_id)
-    if not os.path.exists(session_workspace):
-        os.makedirs(session_workspace)
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
-    try:
-        # Use asyncio.create_subprocess_shell to run the command asynchronously
-        # and capture its output.
-        process = await asyncio.create_subprocess_shell(
-            command,
-            stdout=asyncio.subprocess.PIPE,
-            stderr=asyncio.subprocess.PIPE,
-            cwd=session_workspace  # Execute command in the session's workspace
-        )
+class TerminalTools:
+    def __init__(self):
+        pass
 
-        stdout, stderr = await process.communicate()
+    async def execute_command(self, command: str, timeout: int = 300) -> str:
+        """Executes a shell command and returns its stdout and stderr."""
+        logger.info(f"Executing command: {command}")
+        try:
+            process = await asyncio.create_subprocess_shell(
+                command,
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE
+            )
 
-        output = stdout.decode().strip()
-        error = stderr.decode().strip()
+            stdout, stderr = await asyncio.wait_for(process.communicate(), timeout=timeout)
 
-        if process.returncode != 0:
-            return {"status": "error", "message": f"Command failed with exit code {process.returncode}.\nError: {error}", "output": output, "error": error}
-        else:
-            return {"status": "success", "message": "Command executed successfully.", "output": output}
-    except Exception as e:
-        return {"status": "error", "message": f"Failed to execute command: {e}"}
+            output = f"STDOUT:\n{stdout.decode().strip()}\n"
+            if stderr:
+                output += f"STDERR:\n{stderr.decode().strip()}\n"
+            if process.returncode != 0:
+                output += f"Command exited with code: {process.returncode}\n"
+
+            logger.info(f"Command executed successfully. Return code: {process.returncode}")
+            return output
+        except asyncio.TimeoutError:
+            process.kill()
+            await process.wait()
+            logger.error(f"Command timed out after {timeout} seconds: {command}")
+            return f"Error: Command timed out after {timeout} seconds."
+        except Exception as e:
+            logger.error(f"Error executing command \'{command}\': {e}")
+            return f"Error executing command \'{command}\': {e}"
+
+# Example usage (for testing purposes)
+async def main():
+    terminal_tools = TerminalTools()
+    print(await terminal_tools.execute_command("ls -la"))
+    print(await terminal_tools.execute_command("echo Hello World"))
+    print(await terminal_tools.execute_command("python3 -c \"import time; time.sleep(2); print(\\\"Done\\\")\""))
+    print(await terminal_tools.execute_command("non_existent_command"))
+
+if __name__ == "__main__":
+    asyncio.run(main())
 
