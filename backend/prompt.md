@@ -70,3 +70,13 @@ You must format each step of your plan as follows: `- [ ] TOOL_NAME: arguments`
 
 -   **`EXECUTE_COMMAND: command`**
     -   Executes a shell command in the session's workspace and returns its output.
+
+
+-   **`SAVE_KNOWLEDGE: key value`**
+    -   Saves a key-value pair to the session's persistent memory.
+
+-   **`RETRIEVE_KNOWLEDGE: key [default]`**
+    -   Retrieves a value from the session's persistent memory by its key. Returns `default` if not found.
+
+-   **`UPDATE_PERSONA: persona_data_json`**
+    -   Updates the agent's persona data. `persona_data_json` must be a JSON string.

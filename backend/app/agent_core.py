@@ -1,7 +1,8 @@
 import os
 import re
+import json
 from functools import partial
-from app import gemini_handler, filesystem_tools, session_manager, browser_tools, terminal_tools
+from app import gemini_handler, filesystem_tools, session_manager, browser_tools, terminal_tools, memory_manager
 from app.websocket_manager import ConnectionManager
 
 async def generate_plan(user_prompt: str) -> str:
@@ -87,6 +88,9 @@ async def execute_plan(commands: list, session_id: str, client_id: str, manager:
         "INTERACT_WITH_ELEMENT": partial(browser_tools.interact_with_element, session_id=session_id),
         "TAKE_SCREENSHOT": partial(browser_tools.take_screenshot, session_id=session_id),
         "EXECUTE_COMMAND": partial(terminal_tools.execute_command, session_id=session_id),
+        "SAVE_KNOWLEDGE": partial(memory_manager.save_knowledge, session_id=session_id),
+        "RETRIEVE_KNOWLEDGE": partial(memory_manager.retrieve_knowledge, session_id=session_id),
+        "UPDATE_PERSONA": partial(memory_manager.update_persona, session_id=session_id),
     }
 
     for command in commands:
@@ -126,9 +130,23 @@ async def execute_plan(commands: list, session_id: str, client_id: str, manager:
                     url = args_parts[0]
                     path = args_parts[1] if len(args_parts) > 1 else "screenshot.png"
                     result = await func(url=url, path=path)
+                elif tool_name == "SAVE_KNOWLEDGE":
+                    args_parts = command["args"].split(maxsplit=1)
+                    key = args_parts[0]
+                    value = args_parts[1]
+                    result = await func(key=key, value=value)
+                elif tool_name == "RETRIEVE_KNOWLEDGE":
+                    args_parts = command["args"].split(maxsplit=1)
+                    key = args_parts[0]
+                    default = args_parts[1] if len(args_parts) > 1 else None
+                    result = await func(key=key, default=default)
+                elif tool_name == "UPDATE_PERSONA":
+                    persona_data = json.loads(command["args"])
+                    result = await func(persona_data=persona_data)
                 
                 # Notify frontend that the task is complete
                 await manager.send_personal_message({"type": "task_complete", "data": current_task_message, "result": result}, client_id)
+
 
 
             except Exception as e:
