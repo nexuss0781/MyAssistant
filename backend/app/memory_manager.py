@@ -66,28 +66,28 @@ class MemoryManager:
         return await self._read_json_file(self.knowledge_file, {})
 
 # Example usage (for testing purposes)
-async def main():
-    session_id = "test_session_123"
-    memory_manager = MemoryManager(session_id)
+# async def main():
+#     session_id = "test_session_123"
+#     memory_manager = MemoryManager(session_id)
 
-    # Test saving and retrieving knowledge
-    await memory_manager.save_knowledge("project_name", "Ethco AI")
-    await memory_manager.save_knowledge("user_preference_theme", "dark")
-    print(f"Project Name: {await memory_manager.retrieve_knowledge("project_name")}")
-    print(f"User Theme: {await memory_manager.retrieve_knowledge("user_preference_theme")}")
-    print(f"Non-existent key: {await memory_manager.retrieve_knowledge("non_existent", "default_value")}")
+#     # Test saving and retrieving knowledge
+#     await memory_manager.save_knowledge("project_name", "Ethco AI")
+#     await memory_manager.save_knowledge("user_preference_theme", "dark")
+#     print(f"Project Name: {await memory_manager.retrieve_knowledge("project_name")}")
+#     print(f"User Theme: {await memory_manager.retrieve_knowledge("user_preference_theme")}")
+#     print(f"Non-existent key: {await memory_manager.retrieve_knowledge("non_existent", "default_value")}")
 
-    # Test updating and getting persona
-    await memory_manager.update_persona({"name": "Manus", "role": "AI Assistant"})
-    await memory_manager.update_persona({"favorite_color": "blue"})
-    print(f"Current Persona: {await memory_manager.get_persona()}")
+#     # Test updating and getting persona
+#     await memory_manager.update_persona({"name": "Manus", "role": "AI Assistant"})
+#     await memory_manager.update_persona({"favorite_color": "blue"})
+#     print(f"Current Persona: {await memory_manager.get_persona()}")
 
-    # Test getting all knowledge
-    print(f"All Knowledge: {await memory_manager.get_all_knowledge()}")
+#     # Test getting all knowledge
+#     print(f"All Knowledge: {await memory_manager.get_all_knowledge()}")
 
-    # Clean up test files
-    # import shutil
-    # shutil.rmtree(memory_manager.memory_dir)
+#     # Clean up test files
+#     # import shutil
+#     # shutil.rmtree(memory_manager.memory_dir)
 
-if __name__ == "__main__":
-    asyncio.run(main())
+# if __name__ == "__main__":
+#     asyncio.run(main())
