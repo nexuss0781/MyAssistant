@@ -21,15 +21,15 @@ export default function TaskProgress({ tasks = [] }) {
   const totalTasks = tasks.length;
 
   return (
-    <div className="card bg-secondary text-white my-3 w-75">
-      <div className="card-header d-flex justify-content-between align-items-center">
-        <span>Task Progress</span>
-        <span>{completedCount} / {totalTasks}</span>
+    <div className="card my-3 w-75" style={{backgroundColor: 'var(--background-color)', border: '1px solid var(--border-color)'}}>
+      <div className="card-header d-flex justify-content-between align-items-center" style={{backgroundColor: 'var(--background-color)', borderBottom: '1px solid var(--border-color)'}}>
+        <span style={{color: 'var(--text-color)'}}>Task Progress</span>
+        <span style={{color: 'var(--text-color)'}}>{completedCount} / {totalTasks}</span>
       </div>
       {/* The list is always expanded now, controlled by its presence in the chat log */}
       <ul className="list-group list-group-flush">
         {tasks.map((task, index) => (
-          <li key={index} className={`list-group-item bg-dark text-white d-flex align-items-center ${task.isCompleted ? 'text-muted' : ''}`}>
+          <li key={index} className={`list-group-item d-flex align-items-center ${task.isCompleted ? 'text-muted' : ''}`}>
             {task.isCompleted ? <CheckmarkIcon /> : <CircleIcon />}
             <span className={task.isCompleted ? 'text-decoration-line-through' : ''}>
               {task.description}

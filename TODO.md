@@ -83,51 +83,51 @@ This section breaks down the implementation into actionable tasks, following the
 
 ### Phase 4: Develop VS Code-inspired frontend layout with dual mode switching
 
-*   [ ] **Frontend Architecture:**
-    *   [ ] Research and select `react-resizable-panels` for layout.
-    *   [ ] Integrate Monaco Editor into the central pane.
-    *   [ ] Implement the basic three-pane layout: File Tree (left), Code Editor (center), Chat Window (right).
-    *   [ ] Create a mechanism to switch between the simple window layout and the VS Code-inspired layout.
-*   [ ] **File Tree Component:**
-    *   [ ] Develop a React component (`FileTree.jsx`) to display the project file structure hierarchically.
-    *   [ ] Implement file/folder selection and opening functionality.
-    *   [ ] Integrate with backend `filesystem_tools` to reflect real-time changes.
+*   [x] **Frontend Architecture:**
+    *   [x] Research and select `react-resizable-panels` for layout.
+    *   [x] Integrate Monaco Editor into the central pane.
+    *   [x] Implement the basic three-pane layout: File Tree (left), Code Editor (center), Chat Window (right).
+    *   [x] Create a mechanism to switch between the simple window layout and the VS Code-inspired layout.
+*   [x] **File Tree Component:**
+    *   [x] Develop a React component (`FileTree.jsx`) to display the project file structure hierarchically.
+    *   [x] Implement file/folder selection and opening functionality.
+    *   [x] Integrate with backend `filesystem_tools` to reflect real-time changes.
 
-*   [ ] **Code Editor Component:**
-    *   [ ] Integrate Monaco Editor for code viewing and editing.
-    *   [ ] Implement syntax highlighting, line numbers, and basic editor features.
-    *   [ ] Connect editor content with backend file operations.
+*   [x] **Code Editor Component:**
+    *   [x] Integrate Monaco Editor for code viewing and editing.
+    *   [x] Implement syntax highlighting, line numbers, and basic editor features.
+    *   [x] Connect editor content with backend file operations.
 
-*   [ ] **Chat Window Component:**
-    *   [ ] Redesign the chat interface to fit the right pane of the VS Code layout.
-    *   [ ] Ensure seamless real-time communication via WebSockets.
-    *   [ ] Display agent responses and tool outputs clearly.
+*   [x] **Chat Window Component:**
+    *   [x] Redesign the chat interface to fit the right pane of the VS Code layout.
+    *   [x] Ensure seamless real-time communication via WebSockets.
+    *   [x] Display agent responses and tool outputs clearly.
 
 ### Phase 5: Implement real-time tool usage feedback and visual indicators
 
-*   **Visual Feedback for File Operations:**
-    *   [ ] Implement UI indicators (e.g., icons, color changes) next to file names in the File Tree when the agent is writing, creating, or deleting files/folders.
-    *   [ ] Update indicators upon successful completion or failure.
+*   [x] **Visual Feedback for File Operations:**
+    *   [x] Implement UI indicators (e.g., icons, color changes) next to file names in the File Tree when the agent is writing, creating, or deleting files/folders.
+    *   [x] Update indicators upon successful completion or failure.
 
-*   **Visual Feedback for Terminal Execution:**
-    *   [ ] Display a loading/in-progress indicator in the chat window when a terminal command is running.
-    *   [ ] Show command output in the chat window in real-time.
+*   [x] **Visual Feedback for Terminal Execution:**
+    *   [x] Display a loading/in-progress indicator in the chat window when a terminal command is running.
+    *   [x] Show command output in the chat window in real-time.
 
-*   **Visual Feedback for Browser Integration:**
-    *   [ ] Display current URL and a brief status (e.g., "browsing", "searching") in the chat window when the agent is using browser tools.
-    *   [ ] Potentially display small thumbnails or snippets of web content being processed.
+*   [x] **Visual Feedback for Browser Integration:**
+    *   [x] Display current URL and a brief status (e.g., "browsing", "searching") in the chat window when the agent is using browser tools.
+    *   [x] Potentially display small thumbnails or snippets of web content being processed.
 
 ### Phase 6: Enhance and polish the professional frontend appearance
 
-*   **Styling and Theming:**
-    *   [ ] Apply a professional and modern design system (e.g., Material UI, Ant Design, or custom CSS).
-    *   [ ] Implement light and dark mode themes.
-    *   [ ] Ensure responsiveness across different screen sizes.
+*   [x] **Styling and Theming:**
+    *   [x] Apply a professional and modern design system (e.g., Material UI, Ant Design, or custom CSS).
+    *   [x] Implement light and dark mode themes.
+    *   [x] Ensure responsiveness across different screen sizes.
 
-*   **User Experience Improvements:**
-    *   [ ] Refine chat input and output presentation.
-    *   [ ] Add smooth transitions and animations.
-    *   [ ] Improve error handling and user notifications.
+*   [x] **User Experience Improvements:**
+    *   [x] Refine chat input and output presentation.
+    *   [x] Add smooth transitions and animations.
+    *   [x] Improve error handling and user notifications.
 
 ### Phase 7: Final testing, documentation, and delivery
 

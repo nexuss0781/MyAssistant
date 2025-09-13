@@ -1,0 +1,102 @@
+/* modern-theme.css */
+
+:root {
+  --primary-color: #007bff;
+  --secondary-color: #6c757d;
+  --background-color: #f8f9fa;
+  --text-color: #212529;
+  --border-color: #dee2e6;
+  --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+[data-theme='dark'] {
+  --primary-color: #007bff;
+  --secondary-color: #6c757d;
+  --background-color: #212529;
+  --text-color: #f8f9fa;
+  --border-color: #495057;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.layout-toggle {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
+.file-tree-item {
+  transition: background-color 0.2s ease-in-out;
+}
+
+.file-tree-item:hover {
+  background-color: #e9ecef;
+}
+
+.chat-log {
+  padding: 1rem;
+}
+
+.message {
+  margin-bottom: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.message.user {
+  background-color: var(--primary-color);
+  color: white;
+  align-self: flex-end;
+}
+
+.message.agent {
+  background-color: #e9ecef;
+}
+
+.input-bar {
+  display: flex;
+  padding: 1rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.input-bar input {
+  flex-grow: 1;
+  border: 1px solid var(--border-color);
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+}
+
+.input-bar button {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  margin-left: 1rem;
+  cursor: pointer;
+}

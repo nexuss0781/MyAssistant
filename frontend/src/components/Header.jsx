@@ -5,22 +5,27 @@ const MenuIcon = () => (
   </svg>
 );
 
-export default function Header() {
+export default function Header({ toggleTheme, theme }) {
   return (
     <header className="app-header bg-dark text-light border-bottom">
       <div className="d-flex justify-content-between align-items-center px-3 py-2">
         <h1 className="h3 m-0">Ethco AI</h1>
-        <div className="d-md-none">
-          <button 
-            className="btn" 
-            type="button" 
-            data-bs-toggle="offcanvas" 
-            data-bs-target="#session-sidebar" 
-            aria-controls="session-sidebar"
-            aria-label="Toggle navigation"
-          >
-            <MenuIcon />
+        <div>
+          <button onClick={toggleTheme} className="btn btn-secondary">
+            {theme === 'light' ? 'Dark' : 'Light'} Mode
           </button>
+          <div className="d-md-none">
+            <button 
+              className="btn" 
+              type="button" 
+              data-bs-toggle="offcanvas" 
+              data-bs-target="#session-sidebar" 
+              aria-controls="session-sidebar"
+              aria-label="Toggle navigation"
+            >
+              <MenuIcon />
+            </button>
+          </div>
         </div>
       </div>
     </header>

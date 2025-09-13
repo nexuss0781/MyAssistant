@@ -141,3 +141,16 @@ async def get_file_content(session_id: str, path: str):
     """Returns the content of a file within a session's workspace."""
     return filesystem_tools.read_file_content(path=path, session_id=session_id)
 
+
+@app.post("/sessions/{session_id}/files", tags=["Filesystem"])
+async def save_file_content(session_id: str, request: Request):
+    """Saves content to a file within a session's workspace."""
+    data = await request.json()
+    path = data.get("path")
+    content = data.get("content")
+
+    if not path or content is None:
+        raise HTTPException(status_code=422, detail="Missing 'path' or 'content' fields.")
+
+    return await filesystem_tools.add_content(path=path, content=content, session_id=session_id)
+

@@ -1,10 +1,19 @@
+import { useEffect, useRef } from 'react';
 import Message from './Message';
 import TaskProgress from './TaskProgress';
 
 // This component now receives the list of messages as a prop.
 export default function ChatLog({ messages }) {
+  const chatLogRef = useRef(null);
+
+  useEffect(() => {
+    if (chatLogRef.current) {
+      chatLogRef.current.scrollTop = chatLogRef.current.scrollHeight;
+    }
+  }, [messages]);
+
   return (
-    <div className="container-fluid p-3 h-100 overflow-auto">
+    <div ref={chatLogRef} className="container-fluid p-3 h-100 overflow-auto">
       {messages.map((msg, index) => {
         // If the message is a plan, render the TaskProgress component.
         if (msg.type === 'agent_plan') {

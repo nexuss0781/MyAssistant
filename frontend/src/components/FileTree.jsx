@@ -207,9 +207,10 @@ const FileTree = ({ sessionId, onFileSelect }) => {
     }, 3000);
   };
 
-  // Expose the update method through a ref or callback
+  // Expose methods through a ref
   React.useImperativeHandle(onFileSelect?.ref, () => ({
-    updateFileOperationStatus
+    updateFileOperationStatus,
+    fetchFiles
   }));
 
   if (loading) return (

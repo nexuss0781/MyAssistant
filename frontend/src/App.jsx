@@ -9,6 +9,7 @@ import ToolStatus from './components/ToolStatus';
 import { PanelGroup, Panel, PanelResizeHandle } from 'react-resizable-panels';
 import Editor from '@monaco-editor/react';
 import './App.css';
+import './modern-theme.css';
 
 function App() {
   const fileTreeRef = useRef(null);
@@ -19,6 +20,7 @@ function App() {
   const [sessions, setSessions] = useState([]);
   const [activeSessionId, setActiveSessionId] = useState(null);
   const [layoutMode, setLayoutMode] = useState('simple'); // 'simple' or 'vscode'
+  const [theme, setTheme] = useState('light'); // 'light' or 'dark'
   const [activeFileContent, setActiveFileContent] = useState('');
   const [activeFilePath, setActiveFilePath] = useState('');
   const [activeOperations, setActiveOperations] = useState([]); // Track active tool operations
@@ -91,6 +93,7 @@ function App() {
       case 'file_operation':
         if (fileTreeRef.current) {
           fileTreeRef.current.updateFileOperationStatus(lastMessage.data.path, lastMessage.data.operation);
+          fileTreeRef.current.fetchFiles();
         }
         setMessages(prev => [...prev, {
           type: 'file_operation',
@@ -245,14 +248,53 @@ function App() {
     }
   };
 
+  const handleSaveFile = async () => {
+    if (!activeFilePath) return;
+
+    try {
+      const response = await fetch(`http://localhost:8000/sessions/${activeSessionId}/files`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          path: activeFilePath,
+          content: activeFileContent,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save file');
+      }
+
+      const result = await response.json();
+      if (result.status === 'error') {
+        throw new Error(result.message);
+      }
+
+      // Optionally, show a success message
+      console.log('File saved successfully');
+
+    } catch (error) {
+      console.error('Error saving file:', error);
+      // Optionally, show an error message to the user
+    }
+  };
+
   const toggleLayoutMode = () => {
     setLayoutMode(prevMode => (prevMode === 'simple' ? 'vscode' : 'simple'));
   };
 
+  const toggleTheme = () => {
+    setTheme(prevTheme => (prevTheme === 'light' ? 'dark' : 'light'));
+  };
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+  }, [theme]);
+
   // --- RENDER ---
   return (
     <div className="app-container">
-      <Header />
+      <Header toggleTheme={toggleTheme} theme={theme} />
       <div className="d-flex flex-grow-1">
         {/* Layout Mode Switch */}
         <div className="p-2 bg-light border-bottom">
@@ -299,15 +341,17 @@ function App() {
             <PanelResizeHandle className="bg-secondary" style={{ width: '5px' }} />
             <Panel defaultSize={50} minSize={20}>
               <div className="d-flex flex-column h-100">
-                <h6 className="p-2 mb-0 border-bottom">{activeFilePath || 'No file open'}</h6>
+                <h6 className="p-2 mb-0 border-bottom">{activeFilePath || 'No file open'}
+                  {activeFilePath && <button onClick={handleSaveFile}>Save</button>}
+                </h6>
                 <div className="flex-grow-1">
                   <Editor
                     height="100%"
                     language="javascript"
                     value={activeFileContent}
                     theme="vs-dark"
+                    onChange={(value) => setActiveFileContent(value)}
                     options={{
-                      readOnly: true,
                       minimap: { enabled: false },
                       wordWrap: 'on',
                     }}
