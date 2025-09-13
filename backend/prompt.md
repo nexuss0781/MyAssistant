@@ -57,20 +57,11 @@ You must format each step of your plan as follows: `- [ ] TOOL_NAME: arguments`
 -   **`WEB_SEARCH: query`**
     -   Performs a web search using a search engine (e.g., Google) and returns the results page URL.
 
--   **`EXTRACT_TEXT:`**
-    -   Extracts all visible text content from the current page.
+-   **`EXTRACT_CONTENT: url [format]`**
+    -   Extracts content from the given URL. `format` can be "text", "markdown", or "html". Defaults to "text".
 
--   **`EXTRACT_MARKDOWN:`**
-    -   Extracts the main content of the current page and converts it to Markdown.
-
--   **`GET_PAGE_CONTENT:`**
-    -   Returns the full HTML content of the current page.
-
--   **`CLICK_ELEMENT: selector`**
-    -   Clicks an element identified by a CSS selector.
-
--   **`FILL_FORM_FIELD: selector value`**
-    -   Fills a form field identified by a CSS selector with the given value.
+-   **`INTERACT_WITH_ELEMENT: url selector action [value]`**
+    -   Interacts with an element on a page. `action` can be "click" or "fill". `value` is required for "fill".
 
 -   **`TAKE_SCREENSHOT: [path]`**
     -   Takes a screenshot of the current page and saves it to the specified path (defaults to `screenshot.png`).

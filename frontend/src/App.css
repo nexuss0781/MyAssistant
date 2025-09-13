@@ -105,7 +105,6 @@ body {
 .app-header {
   background: var(--bg-secondary);
   border-bottom: 1px solid var(--border-color);
-  padding: var(--spacing-md) var(--spacing-lg);
   box-shadow: var(--shadow-sm);
   z-index: 100;
 }
@@ -258,6 +257,11 @@ body {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+.message {
+  margin-bottom: var(--spacing-md);
+  animation: fadeInUp 0.3s ease-out;
 }
 
 .message-bubble {

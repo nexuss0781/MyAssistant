@@ -1,32 +1,38 @@
-// frontend/src/components/InputBar.jsx
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 export default function InputBar({ onSubmit, isRunning }) {
   const [prompt, setPrompt] = useState('');
+  const editableDivRef = useRef(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (prompt.trim()) {
       onSubmit(prompt);
-      setPrompt(''); // Clear the input after submitting
+      setPrompt('');
+      if (editableDivRef.current) {
+        editableDivRef.current.textContent = '';
+      }
     }
   };
 
+  const handleInput = (e) => {
+    setPrompt(e.target.textContent);
+  };
+
   return (
-    <div className="p-3 bg-body-tertiary">
+    <div className="p-3 bg-light border-top">
       <form onSubmit={handleSubmit}>
         <div className="input-group">
-          <textarea
-            className="form-control bg-dark text-white"
+          <div
+            ref={editableDivRef}
+            className="form-control"
+            contentEditable={!isRunning}
+            onInput={handleInput}
             placeholder={isRunning ? "Agent is working..." : "Enter your prompt here..."}
-            rows="1"
-            style={{ resize: 'none' }}
-            value={prompt}
-            onChange={(e) => setPrompt(e.target.value)}
-            disabled={isRunning} // Disable input while agent is running
-          ></textarea>
+            style={{ minHeight: '40px', maxHeight: '200px', overflowY: 'auto' }}
+          ></div>
           <button className="btn btn-primary" type="submit" disabled={isRunning}>
-            {isRunning ? 'Running...' : 'Send'}
+            {isRunning ? <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> : <i className="bi bi-send"></i>}
           </button>
         </div>
       </form>

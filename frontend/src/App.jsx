@@ -11,6 +11,7 @@ import Editor from '@monaco-editor/react';
 import './App.css';
 
 function App() {
+  const fileTreeRef = useRef(null);
   // --- STATE MANAGEMENT ---
   const [clientId] = useState(() => `client_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`);
   const [messages, setMessages] = useState([]);
@@ -88,6 +89,9 @@ function App() {
         });
         break;
       case 'file_operation':
+        if (fileTreeRef.current) {
+          fileTreeRef.current.updateFileOperationStatus(lastMessage.data.path, lastMessage.data.operation);
+        }
         setMessages(prev => [...prev, {
           type: 'file_operation',
           text: lastMessage.data.result || lastMessage.data,
@@ -288,7 +292,7 @@ function App() {
               <div className="d-flex flex-column h-100 bg-light border-end">
                 <h6 className="p-2 mb-0 border-bottom">Files</h6>
                 <div className="flex-grow-1 p-2" style={{ overflowY: 'auto' }}>
-                  <FileTree sessionId={activeSessionId} onFileSelect={handleFileSelect} />
+                  <FileTree ref={fileTreeRef} sessionId={activeSessionId} onFileSelect={handleFileSelect} />
                 </div>
               </div>
             </Panel>

@@ -67,8 +67,8 @@ export default function Message({ type, text, metadata }) {
   }
 
   return (
-    <div className={`d-flex ${alignment}`}>
-      <div className={`p-3 rounded-3 mb-3 w-75 ${bgColor}`}>
+    <div className={`d-flex message ${alignment}`}>
+      <div className={`p-3 rounded-3 mb-3 w-75 message-bubble ${bgColor}`}>
         <p className="mb-0" style={{ whiteSpace: 'pre-wrap' }}>{text}</p>
       </div>
     </div>

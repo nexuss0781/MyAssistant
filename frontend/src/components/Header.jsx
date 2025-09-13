@@ -7,9 +7,9 @@ const MenuIcon = () => (
 
 export default function Header() {
   return (
-    <header className="app-header">
-      <div className="d-flex justify-content-between align-items-center">
-        <h1>Ethco AI</h1>
+    <header className="app-header bg-dark text-light border-bottom">
+      <div className="d-flex justify-content-between align-items-center px-3 py-2">
+        <h1 className="h3 m-0">Ethco AI</h1>
         <div className="d-md-none">
           <button 
             className="btn" 
