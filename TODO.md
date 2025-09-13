@@ -84,7 +84,7 @@ This section breaks down the implementation into actionable tasks, following the
 ### Phase 4: Develop VS Code-inspired frontend layout with dual mode switching
 
 *   [ ] **Frontend Architecture:**
-    *   [x] Playwright dependencies installed.
+    *   [x] Research and select `react-resizable-panels` for layout.
     *   [ ] Integrate Monaco Editor into the central pane.
     *   [ ] Implement the basic three-pane layout: File Tree (left), Code Editor (center), Chat Window (right).
     *   [ ] Create a mechanism to switch between the simple window layout and the VS Code-inspired layout.
