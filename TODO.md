@@ -83,25 +83,25 @@ This section breaks down the implementation into actionable tasks, following the
 
 ### Phase 4: Develop VS Code-inspired frontend layout with dual mode switching
 
-*   [ ] **Frontend Architecture:**
+*   [x] **Frontend Architecture:**
     *   [x] Research and select `react-resizable-panels` for layout.
-    *   [ ] Integrate Monaco Editor into the central pane.
-    *   [ ] Implement the basic three-pane layout: File Tree (left), Code Editor (center), Chat Window (right).
-    *   [ ] Create a mechanism to switch between the simple window layout and the VS Code-inspired layout.
-*   [ ] **File Tree Component:**
-    *   [ ] Develop a React component (`FileTree.jsx`) to display the project file structure hierarchically.
-    *   [ ] Implement file/folder selection and opening functionality.
-    *   [ ] Integrate with backend `filesystem_tools` to reflect real-time changes.
+    *   [x] Integrate Monaco Editor into the central pane.
+    *   [x] Implement the basic three-pane layout: File Tree (left), Code Editor (center), Chat Window (right).
+    *   [x] Create a mechanism to switch between the simple window layout and the VS Code-inspired layout.
+*   [x] **File Tree Component:**
+    *   [x] Develop a React component (`FileTree.jsx`) to display the project file structure hierarchically.
+    *   [x] Implement file/folder selection and opening functionality.
+    *   [x] Integrate with backend `filesystem_tools` to reflect real-time changes.
 
-*   [ ] **Code Editor Component:**
-    *   [ ] Integrate Monaco Editor for code viewing and editing.
-    *   [ ] Implement syntax highlighting, line numbers, and basic editor features.
-    *   [ ] Connect editor content with backend file operations.
+*   [x] **Code Editor Component:**
+    *   [x] Integrate Monaco Editor for code viewing and editing.
+    *   [x] Implement syntax highlighting, line numbers, and basic editor features.
+    *   [x] Connect editor content with backend file operations.
 
-*   [ ] **Chat Window Component:**
-    *   [ ] Redesign the chat interface to fit the right pane of the VS Code layout.
-    *   [ ] Ensure seamless real-time communication via WebSockets.
-    *   [ ] Display agent responses and tool outputs clearly.
+*   [x] **Chat Window Component:**
+    *   [x] Redesign the chat interface to fit the right pane of the VS Code layout.
+    *   [x] Ensure seamless real-time communication via WebSockets.
+    *   [x] Display agent responses and tool outputs clearly.
 
 ### Phase 5: Implement real-time tool usage feedback and visual indicators
 
