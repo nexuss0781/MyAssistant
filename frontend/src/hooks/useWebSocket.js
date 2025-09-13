@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 
 // Define the WebSocket URL based on the backend server location
-const WEBSOCKET_URL = 'ws://localhost:8000/ws/';
+const WEBSOCKET_URL = 'wss://ethcobackend.onrender.com/ws/';
 
 export const useWebSocket = (clientId) => {
   // State to hold the last message received from the WebSocket

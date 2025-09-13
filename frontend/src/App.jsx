@@ -146,7 +146,7 @@ function App() {
   useEffect(() => {
     const fetchSessions = async () => {
       try {
-        const response = await fetch('http://localhost:8000/sessions');
+        const response = await fetch('https://ethcobackend.onrender.com/sessions');
         if (!response.ok) throw new Error('Failed to fetch sessions');
         const data = await response.json();
         setSessions(data);
@@ -169,7 +169,7 @@ function App() {
     const fetchHistory = async () => {
         setIsAgentRunning(false); // Reset running state when switching
         try {
-            const response = await fetch(`http://localhost:8000/sessions/${activeSessionId}`);
+            const response = await fetch(`https://ethcobackend.onrender.com/sessions/${activeSessionId}`);
             if (!response.ok) throw new Error('Failed to fetch history');
             const history = await response.json();
 
@@ -200,7 +200,7 @@ function App() {
   
   const handleNewSession = async () => {
     try {
-        const response = await fetch('http://localhost:8000/sessions', { method: 'POST' });
+        const response = await fetch('https://ethcobackend.onrender.com/sessions', { method: 'POST' });
         if (!response.ok) throw new Error('Failed to create session');
         const newSession = await response.json();
         setSessions(prev => [newSession, ...prev]);
@@ -217,7 +217,7 @@ function App() {
     setMessages(prev => [...prev, { type: 'user', text: prompt }]);
 
     try {
-      await fetch('http://localhost:8000/agent/run', {
+      await fetch('https://ethcobackend.onrender.com/agent/run', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -235,7 +235,7 @@ function App() {
   const handleFileSelect = async (filePath) => {
     setActiveFilePath(filePath);
     try {
-      const response = await fetch(`http://localhost:8000/sessions/${activeSessionId}/file_content?path=${filePath}`);
+      const response = await fetch(`https://ethcobackend.onrender.com/sessions/${activeSessionId}/file_content?path=${filePath}`);
       if (!response.ok) throw new Error("Failed to fetch file content");
       const data = await response.json();
       if (data.status === "error") {
@@ -252,7 +252,7 @@ function App() {
     if (!activeFilePath) return;
 
     try {
-      const response = await fetch(`http://localhost:8000/sessions/${activeSessionId}/files`, {
+      const response = await fetch(`https://ethcobackend.onrender.com/sessions/${activeSessionId}/files`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
