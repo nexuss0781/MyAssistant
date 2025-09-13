@@ -19,7 +19,7 @@ function App() {
   const [isAgentRunning, setIsAgentRunning] = useState(false);
   const [sessions, setSessions] = useState([]);
   const [activeSessionId, setActiveSessionId] = useState(null);
-  const [layoutMode, setLayoutMode] = useState('simple'); // 'simple' or 'vscode'
+  const [layoutMode, setLayoutMode] = useState('vscode'); // 'simple' or 'vscode'
   const [theme, setTheme] = useState('dark'); // 'light' or 'dark'
   const [activeFileContent, setActiveFileContent] = useState('');
   const [activeFilePath, setActiveFilePath] = useState('');
@@ -33,7 +33,8 @@ function App() {
     if (!lastMessage) return;
 
     const parsePlanToTasks = (planText) => (
-      planText.split('\n')
+      planText.split('
+')
         .filter(line => line.trim().startsWith('- [ ]'))
         .map(line => ({ description: line.trim().substring(6), isCompleted: false }))
     );
@@ -176,7 +177,8 @@ function App() {
             // Convert raw history into messages for the UI
             const newMessages = history.map(item => {
                 if (item.type === 'agent_plan_text') {
-                    const tasks = item.text.split('\n').filter(line => line.startsWith('- [ ]')).map(line => ({ description: line.substring(6).trim(), isCompleted: true }));
+                    const tasks = item.text.split('
+').filter(line => line.startsWith('- [ ]')).map(line => ({ description: line.substring(6).trim(), isCompleted: true }));
                     return { type: 'agent_plan', tasks };
                 }
                 return { type: item.type, text: item.text };
@@ -331,7 +333,7 @@ function App() {
         ) : (
           <PanelGroup direction="horizontal" className="d-flex flex-grow-1">
             <Panel defaultSize={20} minSize={10}>
-              <div className="d-flex flex-column h-100 bg-light border-end">
+              <div className="d-flex flex-column h-100" style={{ backgroundColor: 'var(--bg-secondary)', borderRight: '1px solid var(--border-color)' }}>
                 <h6 className="p-2 mb-0 border-bottom">Files</h6>
                 <div className="flex-grow-1 p-2" style={{ overflowY: 'auto' }}>
                   <FileTree ref={fileTreeRef} sessionId={activeSessionId} onFileSelect={handleFileSelect} />
@@ -361,7 +363,7 @@ function App() {
             </Panel>
             <PanelResizeHandle style={{ width: '5px', backgroundColor: 'var(--border-color)' }} />
             <Panel defaultSize={30} minSize={20}>
-              <div className="d-flex flex-column h-100 bg-light border-start">
+              <div className="d-flex flex-column h-100" style={{ backgroundColor: 'var(--bg-secondary)', borderLeft: '1px solid var(--border-color)' }}>
                 <h6 className="p-2 mb-0 border-bottom">Chat</h6>
                 <div className="flex-grow-1" style={{ overflowY: 'auto' }}>
                   <ChatLog messages={messages} />
@@ -382,13 +384,3 @@ function App() {
 }
 
 export default App;
-    </div>
-  );
-}
-
-export default App;
-
-
-
-
-
