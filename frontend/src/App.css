@@ -3,38 +3,38 @@
 /* CSS Custom Properties for theming */
 :root {
   /* Colors */
-  --primary-color: #2563eb;
-  --primary-hover: #1d4ed8;
-  --secondary-color: #64748b;
-  --success-color: #10b981;
-  --warning-color: #f59e0b;
-  --error-color: #ef4444;
-  --info-color: #3b82f6;
+  --primary-color: #1abc9c; /* Vibrant Teal */
+  --primary-hover: #16a085; /* Darker Teal */
+  --secondary-color: #95a5a6; /* Soft Gray */
+  --success-color: #2ecc71; /* Emerald Green */
+  --warning-color: #f39c12; /* Orange */
+  --error-color: #e74c3c; /* Red */
+  --info-color: #3498db; /* Bright Blue */
   
   /* Backgrounds */
-  --bg-primary: #ffffff;
-  --bg-secondary: #f8fafc;
-  --bg-tertiary: #f1f5f9;
-  --bg-dark: #0f172a;
-  --bg-dark-secondary: #1e293b;
-  --bg-dark-tertiary: #334155;
+  --bg-primary: #ecf0f1; /* Light Gray */
+  --bg-secondary: #ffffff; /* White */
+  --bg-tertiary: #f2f4f5; /* Very Light Gray */
+  --bg-dark: #2c3e50; /* Dark Blue-Gray */
+  --bg-dark-secondary: #34495e; /* Slightly lighter Dark Blue-Gray */
+  --bg-dark-tertiary: #4a627a; /* Even lighter Dark Blue-Gray */
   
   /* Text colors */
-  --text-primary: #1e293b;
-  --text-secondary: #64748b;
-  --text-muted: #94a3b8;
-  --text-primary-dark: #f1f5f9;
-  --text-secondary-dark: #cbd5e1;
-  --text-muted-dark: #94a3b8;
+  --text-primary: #2c3e50; /* Dark Blue-Gray */
+  --text-secondary: #7f8c8d; /* Medium Gray */
+  --text-muted: #bdc3c7; /* Light Gray */
+  --text-primary-dark: #ecf0f1; /* Light Gray */
+  --text-secondary-dark: #bdc3c7; /* Light Gray */
+  --text-muted-dark: #7f8c8d; /* Medium Gray */
   
   /* Borders */
-  --border-color: #e2e8f0;
-  --border-color-dark: #475569;
+  --border-color: #dce0e1; /* Light Border */
+  --border-color-dark: #5a718a; /* Dark Border */
   
   /* Shadows */
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
   
   /* Spacing */
   --spacing-xs: 0.25rem;
@@ -565,39 +565,44 @@ body {
   background: var(--bg-secondary);
   height: 100%;
   overflow-y: auto;
+  border-right: 1px solid var(--border-color);
 }
 
 .session-list-header {
   padding: var(--spacing-md);
   border-bottom: 1px solid var(--border-color);
   background: var(--bg-tertiary);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .session-list-title {
   font-weight: 600;
-  font-size: 0.875rem;
+  font-size: 0.9rem;
   color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.025em;
-  margin: 0 0 var(--spacing-sm) 0;
+  margin: 0;
 }
 
 .new-session-button {
-  width: 100%;
   background: var(--primary-color);
   color: white;
   border: none;
-  border-radius: var(--radius-md);
-  padding: var(--spacing-sm);
-  font-size: 0.875rem;
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: 0.8rem;
   font-weight: 500;
   cursor: pointer;
   transition: all var(--transition-fast);
+  box-shadow: var(--shadow-sm);
 }
 
 .new-session-button:hover {
   background: var(--primary-hover);
   transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
 }
 
 .session-item {
@@ -606,6 +611,9 @@ body {
   cursor: pointer;
   transition: all var(--transition-fast);
   position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
 }
 
 .session-item:hover {
@@ -623,19 +631,25 @@ body {
   left: 0;
   top: 0;
   bottom: 0;
-  width: 3px;
+  width: 4px;
   background: var(--primary-hover);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+.session-item.active .session-title,
+.session-item.active .session-date {
+  color: white;
 }
 
 .session-title {
   font-weight: 500;
-  font-size: 0.875rem;
-  margin-bottom: var(--spacing-xs);
+  font-size: 0.9rem;
+  margin-bottom: 0;
 }
 
 .session-date {
-  font-size: 0.75rem;
-  opacity: 0.7;
+  font-size: 0.7rem;
+  opacity: 0.8;
 }
 
 /* Monaco Editor overrides */

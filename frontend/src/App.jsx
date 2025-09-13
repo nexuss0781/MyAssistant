@@ -20,7 +20,7 @@ function App() {
   const [sessions, setSessions] = useState([]);
   const [activeSessionId, setActiveSessionId] = useState(null);
   const [layoutMode, setLayoutMode] = useState('simple'); // 'simple' or 'vscode'
-  const [theme, setTheme] = useState('light'); // 'light' or 'dark'
+  const [theme, setTheme] = useState('dark'); // 'light' or 'dark'
   const [activeFileContent, setActiveFileContent] = useState('');
   const [activeFilePath, setActiveFilePath] = useState('');
   const [activeOperations, setActiveOperations] = useState([]); // Track active tool operations
@@ -338,7 +338,7 @@ function App() {
                 </div>
               </div>
             </Panel>
-            <PanelResizeHandle className="bg-secondary" style={{ width: '5px' }} />
+            <PanelResizeHandle style={{ width: '5px', backgroundColor: 'var(--border-color)' }} />
             <Panel defaultSize={50} minSize={20}>
               <div className="d-flex flex-column h-100">
                 <h6 className="p-2 mb-0 border-bottom">{activeFilePath || 'No file open'}
@@ -359,7 +359,7 @@ function App() {
                 </div>
               </div>
             </Panel>
-            <PanelResizeHandle className="bg-secondary" style={{ width: '5px' }} />
+            <PanelResizeHandle style={{ width: '5px', backgroundColor: 'var(--border-color)' }} />
             <Panel defaultSize={30} minSize={20}>
               <div className="d-flex flex-column h-100 bg-light border-start">
                 <h6 className="p-2 mb-0 border-bottom">Chat</h6>
@@ -382,4 +382,16 @@ function App() {
 }
 
 export default App;
+
+
+/>
+    </div>
+  );
+}
+
+export default App;
+
+
+
+
 
